@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos em Renda Variável</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item">Investimentos</li>
+                  <li class="breadcrumb-item">Renda Variável</li>
+                  <li class="breadcrumb-item active">Resgatar Investimento</li>
+                </ol>
+            </nav>
+        </div> 
+
+        <div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Resgatar Investimento em Renda Variável</h5>
+                <form action="{% url 'rv-resgatar' investimento_rv_id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                    <div>
+                        {% for field in form_resgatar_rv.visible_fields %}
+                            <div>
+                                <label for="{{ field.id_for_label }}" >{{field.label}}</label>
+                                {{ field }}<br>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <br>
+                        <button type="submit">Resgatar Renda Variável</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Corretoras de Investimento</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Corretoras</li>
+                    <li class="breadcrumb-item active">Lista de Corretoras</li>
+                </ol>
+            </nav>   
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Corretoras de Investimento</h5>               
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Saldo R$</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Dashboard</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for corretoras_cadastradas in lista_corretoras %}
+                    <tbody>
+                        <tr>
+                            <!-- <th scope="row">{{ corretoras_cadastradas.id }}</th> -->
+                            <td>{{ corretoras_cadastradas.saldo }}</td>
+                            <td>{{ corretoras_cadastradas.descricao }}</td>
+                            <td>
+                                {% if corretoras_cadastradas.incluir_saldo_no_dashboard == True %} 
+                                    Sim
+                                {% else %}
+                                    Não
+                                {% endif %} 
+                            </td>
+                            <td>{{ corretoras_cadastradas.proprietario }}</td>
+                            <td>
+                                <a href="{% url 'editar-corretora' corretoras_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a>
+                                <a href="{% url 'deletar-corretora' corretoras_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                            </td> 
+                        </tr>
+                    </tbody> 
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">
+            <a href="{% url 'cadastrar-corretora' %}" style="text-decoration: none; color: #fff;">+ Cadastrar Nova Corretora de Investimentos</a>
+        </div>
+
+    </main>
+{% endblock %}

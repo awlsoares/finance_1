@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Contas de Previdência Privada</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Previdência Privada</li>
+                    <li class="breadcrumb-item active">Lista de Contas de Previdência Privada</li>
+                </ol>
+            </nav> 
+        </div>  
+        
+        <div class="card"> 
+            <div class="card-body">
+                <h5 class="card-title">Contas de Previdência Privada</h5>               
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Saldo R$</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Dashboard</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for contas_previdencia_cadastradas in lista_contas_previdencia_privada %}
+                    <tbody>
+                        <tr>
+                            <!-- <th scope="row">{{ contas_previdencia_cadastradas.id }}</th> -->
+                            <td>{{ contas_previdencia_cadastradas.saldo }}</td>
+                            <td>{{ contas_previdencia_cadastradas.tipo }}</td>
+                            <td>{{ contas_previdencia_cadastradas.descricao }}</td>
+                            <td>
+                                {% if contas_previdencia_cadastradas.incluir_saldo_no_dashboard == True %}
+                                    Sim
+                                {% else %}
+                                    Não
+                                {% endif %} 
+                            </td>
+                            <td>{{ contas_previdencia_cadastradas.proprietario }}</td>
+                            <td>
+                                <a href="{% url 'editar-conta-previdencia-privada' contas_previdencia_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a>
+                                <a href="{% url 'deletar-conta-previdencia-privada' contas_previdencia_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a> 
+                            </td> 
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">
+            <a href="{% url 'cadastrar-conta-previdencia-privada' %}" style="text-decoration: none; color: #fff;">+ Cadastrar Nova Conta de Previdência Privada</a>
+        </div>
+
+    </main>
+{% endblock %}

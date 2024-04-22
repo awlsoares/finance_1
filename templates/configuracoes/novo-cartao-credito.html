@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Cartões de Crédito</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Cartões de Crédito</li>
+                    <li class="breadcrumb-item active">Novo Cartão</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Novo Cartão de Crédito</h5>
+
+                <form action="{% url 'cadastrar-cartao' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                    
+                        {% for field in form_novo_cartao.visible_fields %}
+                            <div class="row mb-3">
+                                <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                                <div class="col-sm-10">{{ field }}</div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Cadastrar Cartão de Crédito</button>
+                            </div>
+                        </div>
+                </form> 
+            </div>
+        </div>
+    </main>
+{% endblock %}

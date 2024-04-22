@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Cartões de Crédito</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Cartões de Crédito</li>
+                    <li class="breadcrumb-item active">Lista de Cartões</li>
+                </ol>
+            </nav>   
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Cartões de Crédito</h5>               
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Bandeira</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Limite R$</th>
+                            <th scope="col">Limite Disponível R$</th>
+                            <th scope="col">Dashboard</th>
+                            <th scope="col">Fechamento</th>
+                            <th scope="col">Vencimento</th>
+                            <th scope="col">Conta Débito</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for cartoes_cadastrados in lista_cartoes %}
+                        <tbody>
+                            <tr>
+                                <!-- <th scope="row">{{ cartoes_cadastrados.id }}</th> -->
+                                <td>{{ cartoes_cadastrados.bandeira }}</td>
+                                <td>{{ cartoes_cadastrados.descricao }}</td>
+                                <td>{{ cartoes_cadastrados.limite}}</td>
+                                <td>{{ cartoes_cadastrados.limite_disponivel}}</td>
+                                <td>
+                                    {% if cartoes_cadastrados.incluir_saldo_no_dashboard == True %}
+                                        Sim
+                                    {% else %}
+                                        Não
+                                    {% endif %} 
+                                </td>
+                                <td>{{ cartoes_cadastrados.dia_fechamento_fatura }}</td>
+                                <td>{{ cartoes_cadastrados.dia_vencimento_fatura }}</td>
+                                <td>{{ cartoes_cadastrados.local_debito_fatura }}</td>
+                                <td>{{ cartoes_cadastrados.proprietario }}</td>
+                                <td>
+                                    <a href="{% url 'editar-cartao' cartoes_cadastrados.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a>
+                                    <a href="{% url 'deletar-cartao' cartoes_cadastrados.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                </td> 
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}       

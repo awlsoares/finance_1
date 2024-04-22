@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos em Renda Variável</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Investimentos</li>
+                    <li class="breadcrumb-item">Renda Variável</li>
+                    <li class="breadcrumb-item active">Lista de Investimentos</li>
+                </ol>
+            </nav>   
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Investimentos em Renda Variável</h5>
+                <h6> Filtrar: 
+                    <a href="{% url 'rv-registrados' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Registrados</button></a>
+                    <a href="{% url 'rv-ativos' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivados</button></a>
+                    <a href="{% url 'rv-liquidados' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Liquidados</button></a>
+                    <a href="{% url 'lista-investimento-rv' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Todos</button></a>
+                </h6>                
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead style="text-align: center; vertical-align: middle">
+                        <tr>
+                            <th scope="col">Investimento</th> 
+                            <th scope="col">Valor R$</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Corretora</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Status</th> 
+                            <!-- <th scope="col">Proprietário</th> -->
+                        </tr>
+                    </thead>
+                    {% for renda_variavel in lista_renda_variavel %}
+                    <tbody style="text-align: center; vertical-align: middle">
+                        <tr>
+                            <td>{{ renda_variavel.data_investimento|date:"d/m/y" }}</td>
+                            <td>{{ renda_variavel.valor_investido }}</td>
+                            <td>
+                                <a href="{% url 'rv-detalhado' renda_variavel.id %}">
+                                {{ renda_variavel.descricao }}
+                                </a>
+                            </td>
+                            <td>{{ renda_variavel.corretora }}</td>
+                            <td>{{ renda_variavel.tipo_investimento_rv }}</td>
+                            <td style="width: 10px; background-color: {{ renda_variavel.cor }}; text-align: center">{{ renda_variavel.investimento_status }}</td>
+                            <!-- <td>{{ renda_variavel.proprietario }}</td>                           -->
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </main>
+    </div>
+{% endblock %}

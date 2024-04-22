@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Receitas</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Receitas</li>
+                    <li class="breadcrumb-item active">Lista de Receitas</li>
+                </ol>
+            </nav>   
+        </div>  
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Receitas</h5> 
+                <h6> Filtrar: 
+                    <a href="{% url 'lista-receitas-registradas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Registradas</button></a>
+                    <a href="{% url 'lista-receitas-efetivadas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivadas</button></a>
+                    <a href="{% url 'lista-receitas-atrasadas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Atrasadas</button></a>
+                    <a href="{% url 'lista-receitas-futuras' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Futuras</button></a>      
+                    <a href="{% url 'lista-receitas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Todas</button></a>
+                </h6>                    
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Status</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">R$</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Conta Crédito</th>
+                            <th scope="col">Crédito Efetivado</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for receitas_cadastradas in lista_receitas %}
+                        <tbody>
+                            <tr>
+                                <!-- <th scope="row">{{ receitas_cadastradas.id }}</th> -->
+                                <td>{{ receitas_cadastradas.receita_status }}</td>
+                                <td>{{ receitas_cadastradas.data|date:"d/m/Y" }}</td>
+                                <td>{{ receitas_cadastradas.valor }}</td>
+                                <td>{{ receitas_cadastradas.descricao }}</td>
+                                <td>{{ receitas_cadastradas.categoria }}</td>
+                                <td>{{ receitas_cadastradas.conta_credito }}</td>
+                                <td>{{ receitas_cadastradas.credito_ja_realizado }}</td>
+                                <td>{{ receitas_cadastradas.proprietario }}</td> 
+                                <td>
+                                    {% if receitas_cadastradas.receita_status == 'Efetivado' %}
+                                        <a href="{% url 'receita-devolver' receitas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Devolver</button></a>
+                                        <a href="{% url 'receita-deletar' receitas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                    {% else %}    
+                                        <a href="{% url 'receita-efetivar' receitas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivar</button></a><br>
+                                        <a href="{% url 'receita-editar' receitas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                        <a href="{% url 'receita-deletar' receitas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                    {% endif %}    
+                                </td> 
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

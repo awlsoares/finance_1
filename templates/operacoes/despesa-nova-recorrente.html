@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Despesas</h1>
+            <nav>
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Despesas</li>
+                <li class="breadcrumb-item active">Nova Despesa Recorrente</li>
+                </ol>
+            </nav>
+        </div> 
+        <div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Nova Despesa Recorrente</h5>
+
+				<!-- General Form Elements -->
+                <form id="novaDespesaForm" action="{% url 'despesa-cadastrar-recorrente' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+
+                    <div class="row mb-3">
+                        <label for="data" class="col-sm-2 col-form-label">Data do Débito:</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="data" name="data" required class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="valor" class="col-sm-2 col-form-label">Valor (R$):</label>
+                        <div class="col-sm-10"> 
+                            <input type="number" id="valor" name="valor" step="0.01" required class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="descricao" class="col-sm-2 col-form-label">Descrição:</label>
+                        <div class="col-sm-10"> 
+                            <input type="text" id="descricao" name="descricao" required class="form-control">
+                        </div>
+                    </div>  
+                    
+                    <div class="row mb-3">
+                        <label for="categoria" class="col-sm-2 col-form-label">Categoria:</label>
+                        <div class="col-sm-10">
+                            <select id="categoria" name="categoria" required class="form-select" aria-label="Default select example">
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.id }}">{{ categoria.descricao }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>  
+
+                    <div class="row mb-3">
+                        <label for="conta_debito" class="col-sm-2 col-form-label">Conta para Débito:</label>
+                        <div class="col-sm-10">
+                            <select id="conta_debito" name="conta_debito" required class="form-select" aria-label="Default select example">
+                                {% for conta in contas %}
+                                    <option value="{{ conta.id }}">{{ conta.descricao }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>        
+
+                    <div class="row mb-3">
+                        <label for="id_repeticoes" class="col-sm-2 col-form-label">Quantidade de Recorrências:</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="id_repeticoes" name="repeticoes" min="2" max="60" value="2" class="form-control" required>
+                        </div>
+                    </div>  
+
+                    <div class="row mb-3">
+                        <label for="id_periodicidade" class="col-sm-2 col-form-label">Periodicidade:</label>
+                        <div class="col-sm-10">
+                            <select id="id_periodicidade" name="periodicidade" class="form-select" aria-label="Default select example" required>
+                                <option value="Mensal">Mensal</option>
+                                <option value="Semanal">Semanal</option>
+                                <option value="Anual">Anual</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Cadastrar Despesa Recorrente</button>
+                        </div>
+					</div>
+
+				</form><!-- End General Form Elements -->
+			</div>
+		</div>
+	</main>
+{% endblock %}

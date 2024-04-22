@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Despesas</h1>
+            <nav>
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Despesas</li>
+                <li class="breadcrumb-item active">Nova Despesa</li>
+                </ol>
+            </nav>
+        </div> 
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Nova Despesa</h5>
+                
+                <form id="novaDespesaForm" action="{% url 'despesa-cadastrar' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                        {% for field in form_nova_despesa.visible_fields %}
+                            <div class="row mb-3">
+                                <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                                <div class="col-sm-10">{{ field }}</div>
+                            </div>
+
+                        {% endfor %}
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Cadastrar Despesa</button>
+                            </div>
+                        </div>
+                </form> 
+            </div>
+        </div>
+    </main>          
+
+    <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            // Adicione um identificador aos campos de data para facilitar a seleção
+            var dataDespesaField = $('#id_data');
+            var debitoJaRealizadoField = $('#id_debito_ja_realizado');
+
+            dataDespesaField.change(function(){
+                // Obter o valor da data e converter para objetos Date
+                var dataDespesa = dataDespesaField.val();
+                var dataDespesa = new Date(dataDespesa);
+
+                // Obter a data atual do sistema
+                var hoje = new Date();
+
+                // Verificar se a "data" da receita é posterior a data "hoje"
+                if ((dataDespesa > hoje))
+                {
+                    alert('Você está lançando uma data futura. A Despesa será cadastrada como Débito NÃO Realizado, independente de sua resposta em "Valor Debitado em Conta"');
+                }
+            });
+        });
+    </script>
+{% endblock %}

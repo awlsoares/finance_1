@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Login de Usuário</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Usuários</li>
+                    <li class="breadcrumb-item active">Login</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Login</h5>
+                <form action="{% url 'login' %}" method="POST"> <!--POST oculta do endereço do browser as informações do formulário-->
+                    {% csrf_token %} 
+                    <!-- Diferentemente do session token e dos cookies, o CSRF Token não pode ser utilizado por 
+                    um hacker mal intencionado, sendo crucial em todo formulário da web, para que o envio de 
+                    formulários não seja forjado por terceiros.-->
+                    {% for field in form.visible_fields %}
+                        <div class="row mb-3">
+                            <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                            <div class="col-sm-10">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Logar</button>
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </main>
+{% endblock %}

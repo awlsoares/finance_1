@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos em Previdência Privada</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Investimentos</li>
+                    <li class="breadcrumb-item">Previdência Privada</li>
+                    <li class="breadcrumb-item active">Lista de Investimentos</li>
+                </ol>
+            </nav>   
+        </div>
+        
+        <div class="card"> 
+            <div class="card-body">
+                <h5 class="card-title">Investimentos em Previdência Privada</h5>
+                <h6> Filtrar: 
+                    <a href="{% url 'prev-registrados' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Registrados</button></a>
+                    <a href="{% url 'prev-ativos' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivados</button></a>
+                    <a href="{% url 'lista-investimento-prev' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Todos</button></a>
+                </h6>                
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover" style="text-align: center;">
+                    <thead style="text-align: center; vertical-align: middle">
+                        <tr>
+                            <th scope="col">Investimento</th>
+                            <th scope="col">Valor R$</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Conta de Previdência</th>
+                            <th scope="col">Fonte R$</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+
+                    {% for previdencia_privada in lista_previdencia_privada %}
+                    <tbody>
+                        <tr>
+                            <td>{{ previdencia_privada.data_investimento|date:"d/m/y" }}</td>
+                            <td>{{ previdencia_privada.valor_investido }}</td>
+                            <td>
+                                <a href="{% url 'prev-detalhado' previdencia_privada.id %}">
+                                    {{ previdencia_privada.descricao }}    
+                                </a>
+                            </td>
+                            <td>{{ previdencia_privada.conta_previdencia }}</td>
+                            <td>{{ previdencia_privada.conta_debito }}</td>
+                            <td style="width: 10px; background-color: {{ previdencia_privada.cor }}; text-align: center; vertical-align: middle">{{ previdencia_privada.investimento_status }}</td>
+                            
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

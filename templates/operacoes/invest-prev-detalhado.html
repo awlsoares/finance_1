@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Investimentos</li>
+                    <li class="breadcrumb-item">Previdência Privada</li>
+                    <li class="breadcrumb-item active">Lista de Investimentos</li>
+                </ol>
+            </nav>    
+            
+        <div class="card">
+            <!-- <div class="card-body">
+                <h5 class="card-title">Despesa Detalhada</h5>    
+            </div> -->
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Investimento em Previdência Privada {{ investimento.investimento_status }}</h5>                   
+                    
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Status</th>
+                                <td style="background-color: {{ cor }}"> {{ investimento.investimento_status }} </td>
+                            </tr>
+                            <tr>
+                                <th>Data de Investimento</th>
+                                <td><span style="user-select: none;">{{ investimento.data_investimento|date:"d/m/y" }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Valor Investido R$</th>
+                                <td>{{ investimento.valor_investido }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descrição</th>
+                                <td>{{ investimento.descricao }}</td>
+                            </tr>
+                            <tr>
+                                <th>Conta Débito</th>
+                                <td>{{ investimento.conta_debito }}</td>
+                            </tr>
+                            <tr>
+                                <th>Conta de Previdência</th>
+                                <td>{{ investimento.conta_previdencia }}</td>
+                            </tr>
+                            <tr>
+                                <th>Proprietário</th>
+                                <td>{{ investimento.proprietario }}</td>
+                            </tr>
+                            <tr>
+                                <th>Registro no Sistema</th>
+                                <td>{{ investimento.data_registro|date:"d/m/Y" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+
+                <div style="display: flex; padding: 10;">
+                    <div style="display: flex; padding: 10;">
+                        {% if investimento.investimento_status == 'Efetivado' %}
+                            <a href="{% url 'prev-editar' investimento.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px; margin-left: 20px;">Editar</button></a><br>
+                            <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 50px;">Deletar</button></a>
+                        {% else %}    
+                            <a href="{% url 'prev-efetivar' investimento.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px; margin-left: 20px;">Efetivar</button></a><br>
+                            <a href="{% url 'prev-editar' investimento.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px;">Editar</button></a><br>
+                            <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 50px;">Deletar</button></a>
+                        {% endif %}    
+                    </div>
+                    
+                    <a href="{% url 'lista-investimento-prev' %}" style="margin-right: 10px;">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px 15px; background-color: cadetblue; color: black;">Retornar</button>
+                    </a>
+                </div>
+            </div>           
+        </div>
+    </div> 
+</main>
+{% endblock %}

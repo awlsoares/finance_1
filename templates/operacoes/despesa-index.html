@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %} 
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="card-title">Despesas</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Despesas</li>
+                <li class="breadcrumb-item active">Lista de Despesas</li>
+            </ol>
+        </nav>   
+            
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Filtrar Status:
+                    <a href="{% url 'lista-despesas-registradas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Registradas</button></a>
+                    <a href="{% url 'lista-despesas-efetivadas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Pagas</button></a>
+                    <a href="{% url 'lista-despesas-atrasadas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Atrasadas</button></a>
+                    <a href="{% url 'lista-despesas-futuras' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Futuras</button></a>      
+                    <a href="{% url 'lista-despesas' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Todas</button></a>
+                </h5>  
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Lista de Despesas - {{ hoje }}</h5> 
+                                            
+                        <!-- Table with stripped rows -->
+                        <table class="table table-hover" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Valor R$</th>
+                                    <th scope="col">Descrição</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Conta Débito</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+
+                            {% for despesas_cadastradas in lista_despesas %}
+                                <tbody>
+                                    <tr>
+                                        <td>{{ despesas_cadastradas.data|date:"d/m/Y" }}</td>
+                                        <td>{{ despesas_cadastradas.valor }}</td>
+                                        <td>
+                                            <a href="{% url 'despesa-detalhada' despesas_cadastradas.id %}">
+                                                {{ despesas_cadastradas.descricao }}    
+                                            </a>
+                                        </td>
+                                        <td>{{ despesas_cadastradas.categoria }}</td>
+                                        <td>{{ despesas_cadastradas.conta_debito }}</td>
+                                        <td style="width: 10px; background-color: {{ despesas_cadastradas.cor }}; text-align: center">
+                                            {{ despesas_cadastradas.condicao }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</main>
+{% endblock %}

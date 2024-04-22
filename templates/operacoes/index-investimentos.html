@@ -1,0 +1,212 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Investimentos</li>
+                    <li class="breadcrumb-item active">Lista de Investimentos</li>
+                </ol>
+            </nav>    
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Investimentos em Renda Fixa</h5>
+                <!-- <h6> Filtrar:
+                    <a href="{% url 'rf-registrados' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Registrados</button></a>
+                    <a href="{% url 'rf-ativos' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivados</button></a>
+                    <a href="{% url 'rf-liquidados' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Liquidados</button></a>
+                    <a href="{% url 'lista-investimento-rf' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Todos</button></a>
+                </h6>                 -->
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Corretora</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Rentabilidade</th>
+                            <th scope="col">Data de Investimento</th>
+                            <th scope="col">Data de Vencimento</th>    
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Investimento R$</th>
+                            <th scope="col">Taxa Negociada</th>
+                            <th scope="col">Fonte R$</th>
+                            <th scope="col">Corretagem R$</th>
+                            <th scope="col">IRPF R$</th>
+                            <th scope="col">Resgate</th>
+                            <th scope="col">Resgate R$</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                            
+                        </tr>
+                    </thead>
+
+                    {% for renda_fixa in lista_renda_fixa %}
+                    <tbody>
+                        <tr>
+                            <td>{{ renda_fixa.investimento_status }}</td>
+                            <td>{{ renda_fixa.corretora }}</td>
+                            <td>{{ renda_fixa.tipo_investimento_rf }}</td>
+                            <td>{{ renda_fixa.tipo_rentabilidade }}</td>
+                            <td>{{ renda_fixa.data_investimento|date:"d/m/y" }}</td>
+                            <td>{{ renda_fixa.data_vencimento|date:"d/m/y" }}</td>
+                            <td>{{ renda_fixa.descricao }}</td>
+                            <td>{{ renda_fixa.valor_investido }}</td>
+                            <td>{{ renda_fixa.taxa_negociada }}</td>
+                            <td>{{ renda_fixa.conta_debito }}</td>
+                            {% if renda_fixa.investimento_status == 'Liquidado' %}
+                                <td>{{ renda_fixa.taxas_corretagem_aplicacao }} + {{ renda_fixa.taxas_corretagem_resgate }}</td>
+                                <td>{{ renda_fixa.irpf_aplicacao }} + {{ renda_fixa.irpf_resgate }}</td>
+                                <td>{{ renda_fixa.data_resgate|date:"d/m/y" }}</td>
+                                <td>{{ renda_fixa.valor_resgate_liquido}}</td>
+                            {% else %}
+                                <td>{{ renda_fixa.taxas_corretagem_aplicacao }}</td>
+                                <td>{{ renda_fixa.irpf_aplicacao }}</td>
+                                <td>---</td>
+                                <td>---</td>
+                            {% endif %}
+                            <td>{{ renda_fixa.proprietario }}</td>
+                            <td>
+                                {% if renda_fixa.investimento_status == 'Ativo' %}
+                                <a href="{% url 'rf-resgatar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Resgatar</button></a><br>
+                                <a href="{% url 'rf-editar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                <a href="{% url 'rf-deletar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                            {% else %}    
+                                {% if renda_fixa.investimento_status == 'Registrado' %}
+                                    <a href="{% url 'rf-efetivar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivar</button></a><br>
+                                    <a href="{% url 'rf-editar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                    <a href="{% url 'rf-deletar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                {% else %}
+                                    <a href="{% url 'rf-reativar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Reativar</button></a><br>
+                                    <a href="{% url 'rf-deletar' renda_fixa.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                {% endif %}
+                            {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Investimentos em Renda Variável</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Status</th> 
+                            <th scope="col">Corretora</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Data de Investimento</th>  
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Investimento R$</th>
+                            <th scope="col">Nº Cotas</th>
+                            <th scope="col">PM</th>
+                            <th scope="col">Fonte R$</th>
+                            <th scope="col">Corretagem R$</th>
+                            <th scope="col">IRPF R$</th>
+                            <th scope="col">Resgate</th>
+                            <th scope="col">Resgate R$</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    {% for renda_variavel in lista_renda_variavel %}
+                    <tbody>
+                        <tr>
+                            <td>{{ renda_variavel.investimento_status }}</td>
+                            <td>{{ renda_variavel.corretora }}</td>
+                            <td>{{ renda_variavel.tipo_investimento_rv }}</td>
+                            <td>{{ renda_variavel.data_investimento|date:"d/m/y" }}</td>
+                            <td>{{ renda_variavel.descricao }}</td>
+                            <td>{{ renda_variavel.valor_investido }}</td>
+                            <td>{{ renda_variavel.quantidade_cotas }}</td>
+                            <td>{{ renda_variavel.preco_medio }}</td>
+                            <td>{{ renda_variavel.conta_debito }}</td>
+                            {% if renda_variavel.investimento_status == 'Liquidado' %}
+                                <td>{{ renda_variavel.taxas_corretagem_aplicacao }} + {{ renda_variavel.taxas_corretagem_resgate }}</td>
+                                <td>{{ renda_variavel.irpf_aplicacao }} + {{ renda_variavel.irpf_resgate }}</td>
+                                <td>{{ renda_variavel.data_resgate|date:"d/m/y" }}</td>
+                                <td>{{ renda_variavel.valor_resgate_liquido}}</td>
+                            {% else %}
+                                <td>{{ renda_variavel.taxas_corretagem_aplicacao }}</td>
+                                <td>{{ renda_variavel.irpf_aplicacao }}</td>
+                                <td>---</td>
+                                <td>---</td>
+                            {% endif %}
+                            <td>{{ renda_variavel.proprietario }}</td>
+                            <td>
+                                {% if renda_variavel.investimento_status == 'Ativo' %}
+                                    <a href="{% url 'rv-resgatar' renda_variavel.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Resgatar</button></a><br>
+                                    <a href="{% url 'rv-editar' renda_variavel.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                    <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                {% else %}    
+                                    {% if renda_variavel.investimento_status == 'Registrado' %}
+                                        <a href="{% url 'rv-efetivar' renda_variavel.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivar</button></a><br>
+                                        <a href="{% url 'rv-editar' renda_variavel.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                        <a href="#"><buttontype="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                    {% else %}
+                                        <a href="{% url 'rv-reativar' renda_variavel.id %}"><button>Reativar</button></a><br>
+                                        <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        
+        <div class="card">    
+            <div class="card-body">
+                <h5 class="card-title">Investimentos em Previdência Privada</h5>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Conta de Previdência</th>
+                            <th scope="col">Data de Investimento</th>   
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Investimento R$</th>
+                            <th scope="col">Fonte R$</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                            
+                        </tr>
+                    </thead>
+
+                    {% for previdencia_privada in lista_previdencia_privada %}
+                    <tbody>
+                        <tr>
+                            <td>{{ previdencia_privada.investimento_status }}</td>
+                            <td>{{ previdencia_privada.conta_previdencia }}</td>
+                            <td>{{ previdencia_privada.data_investimento|date:"d/m/y" }}</td>
+                            <td>{{ previdencia_privada.descricao }}</td>
+                            <td>{{ previdencia_privada.valor_investido }}</td>
+                            <td>{{ previdencia_privada.conta_debito }}</td>
+                            <td>{{ previdencia_privada.proprietario }}</td>
+                            <td>
+                                {% if previdencia_privada.investimento_status == 'Ativo' %}
+                                    <a href="{% url 'prev-editar' previdencia_privada.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                    <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                {% else %}    
+                                    <a href="{% url 'prev-efetivar' previdencia_privada.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Efetivar</button></a><br>
+                                    <a href="{% url 'prev-editar' previdencia_privada.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a><br>
+                                    <a href="#"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

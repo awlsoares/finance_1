@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Receitas</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Receitas</li>
+                    <li class="breadcrumb-item active">Editar Receita</li>
+                </ol> 
+            </nav> 
+        </div>  
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Editar Receita</h5>
+                <form action="{% url 'receita-editar' receita_id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                    <div>
+                        {% for field in form_editar_receita.visible_fields %}
+                        <div class="row mb-3">
+                            <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                            <div class="col-sm-10">{{ field }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Editar Receita</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            // Adicione um identificador aos campos de data para facilitar a seleção
+            var dataReceitaField = $('#id_data');
+            var creditoJaRealizadoField = $('#id_credito_ja_realizado');
+
+            dataReceitaField.change(function(){
+                // Obter o valor da data e converter para objetos Date
+                var dataReceita = dataReceitaField.val();
+                var dataReceita = new Date(dataReceita);
+
+                // Obter a data atual do sistema
+                var hoje = new Date();
+
+                // Verificar se a "data" da receita é posterior a data "hoje"
+                if ((dataReceita > hoje))
+                {
+                    alert('Você está lançando uma data futura. Se o formulário for enviado assim o sistema salvará automaticamente a Receita como Crédito NÃO Realizado, independente de sua resposta em "Valor Creditado em Conta"');
+                }
+            });
+        });
+    </script>
+{% endblock %}

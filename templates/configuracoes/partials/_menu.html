@@ -1,0 +1,117 @@
+{% load static %}
+<div>
+    <header>
+        <!-- <h1>Projeto Orçamento</h1> -->
+        <p>{% include 'configuracoes/partials/_alertas.html'%}</p>    
+    </header>
+    <main>
+        <section>    
+            <ul class="nav nav-pills">
+
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'index' %}">Nice Admin</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Receitas</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'receita-cadastrar' %}">Cadastrar Receita Única</a></li>
+                    <li><a class="dropdown-item" href="{% url 'receita-cadastrar-recorrente' %}">Cadastrar Receita Recorrente</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-receitas-registradas' %}">Receitas Registradas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-receitas-efetivadas' %}">Receitas Efetivadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-receitas-atrasadas' %}">Receitas Atrasadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-receitas-futuras' %}">Receitas Futuras</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-receitas' %}">Listar todas as Receitas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-categoria-rec' %}">Cadastrar Categoria de Receita</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-categorias-receitas' %}">Listar Categorias de Receitas</a></li>
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Despesas</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'despesa-cadastrar' %}">Cadastrar Despesa Única</a></li>
+                    <li><a class="dropdown-item" href="{% url 'despesa-cadastrar-recorrente' %}">Cadastrar Despesa Recorrente</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-despesas-registradas' %}">Despesas Registradas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-despesas-efetivadas' %}">Despesas Efetivadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-despesas-atrasadas' %}">Despesas Atrasadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-despesas-futuras' %}">Despesas Futuras</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-despesas' %}">Listar todas as Despesas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item disabled" href="#">Cadastrar Despesa no Cartão de Crédito</a></li>
+                    <li><a class="dropdown-item disabled" href="#">Editar Despesa no Cartão de Crédito</a></li>
+                    <li><a class="dropdown-item disabled" href="#">Excluir Despesa no Cartão de Crédito</a></li>
+                    <li><a class="dropdown-item disabled" href="#">Estornar Despesa no Cartão de Crédito</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-categoria-desp' %}">Cadastrar Categoria de Despesa</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-categorias-despesas' %}">Listar Categorias de Despesas</a></li>
+                  </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Investimentos</a>
+                  <ul class="dropdown-menu">
+                    
+                    <li><a class="dropdown-item" href="{% url 'lista-investimentos' %}">Listar Todos os Investimentos</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-investimento-rf' %}">Listar Investimentos RF</a></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-investimento-rf' %}">Investir em Renda Fixa</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rf-registrados' %}">RF Registradas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rf-ativos' %}">RF Efetivadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rf-liquidados' %}">RF Liquidadas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-investimento-rv' %}">Listar Investimentos RV</a></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-investimento-rv' %}">Investir em Renda Variável</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rv-registrados' %}">RV Registradas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rv-ativos' %}">RV Efetivadas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'rv-liquidados' %}">RV Liquidadas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-investimento-prev' %}">Listar Investimentos Previdência</a></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-investimento-prev' %}">Investir em Previdência Privada</a></li>
+                    <li><a class="dropdown-item" href="{% url 'prev-registrados' %}">Previdência Registradas</a></li>
+                    <li><a class="dropdown-item" href="{% url 'prev-ativos' %}">Previdência Efetivadas</a></li>
+                    
+                  </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Configurações</a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-conta' %}">Cadastrar Conta</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-contas' %}">Exibir Contas</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-corretora' %}">Cadastrar Corretora</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-corretoras' %}">Exibir Corretoras</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'cadastrar-conta-previdencia-privada' %}">Cadastrar Previdência</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lista-contas-previdencia-privada' %}">Exibir Previdências</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item disabled" href="{% url 'cadastrar-cartao' %}">Cadastrar Cartão</a></li>
+                    <li><a class="dropdown-item disabled" href="{% url 'lista-cartoes' %}">Exibir Cartões</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item disabled" href="#">Sobre</a></li>
+                  </ul>
+                </li>
+
+                {% if request.user.is_authenticated %}
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Usuário: {{request.user.username}} ({{request.user.id}})</a>
+                    <ul class="dropdown-menu">
+                      {% if request.user.username == 'admin' %}
+                        <li><a class="dropdown-item" href="{% url 'cadastro' %}">Cadastrar Usuário</a></li>
+                      {% else %}
+                      <!-- <li><a class="dropdown-item disabled" href="{% url 'cadastro' %}">Cadastrar Usuário</a></li> disabled oculta cadastro se não for admin -->
+                      {% endif %}
+                      <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                  </li>
+                {% endif %}
+            </ul>
+        </section>

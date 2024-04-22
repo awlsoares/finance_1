@@ -1,0 +1,278 @@
+<aside id="sidebar" class="sidebar">
+  {% if request.user.is_authenticated %}
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse">
+          <i class="bi bi-currency-dollar"></i><span>Receita</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'receita-cadastrar' %}">
+              <i class="bi bi-circle"></i><span>Nova Receita Única</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'receita-cadastrar-recorrente' %}">
+              <i class="bi bi-circle"></i><span>Nova Receita Recorrente</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lista-receitas' %}">
+              <i class="bi bi-circle"></i><span>Exibir Receitas</span>
+            </a>
+          </li>
+          <li>
+            <a>
+              <span>----------------------</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'cadastrar-categoria-rec' %}">
+              <i class="bi bi-circle"></i><span>Nova Categoria</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lista-categorias-receitas' %}">
+              <i class="bi bi-circle"></i><span>Exibir Categorias</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Receitas Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse">
+          <i class="bi bi-cart-x "></i><span>Despesa</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'despesa-cadastrar' %}">
+              <i class="bi bi-circle"></i><span>Nova Despesa Única</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'despesa-cadastrar-recorrente' %}">
+              <i class="bi bi-circle"></i><span>Nova Despesa Recorrente</span>
+            </a>
+          </li>
+          
+          <li>
+            <a href="{% url 'lista-despesas' %}">
+              <i class="bi bi-circle"></i><span>Exibir Despesas</span>
+            </a>
+          </li>
+          <li>
+            <a>
+              <span>----------------------</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'cadastrar-categoria-desp' %}">
+              <i class="bi bi-circle"></i><span>Nova Categoria</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lista-categorias-despesas' %}">
+              <i class="bi bi-circle"></i><span>Exibir Categorias</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Despesas Nav -->
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#cartoes-nav" data-bs-toggle="collapse">
+          <i class="bi bi-credit-card "></i><span>Cartão de Crédito</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="cartoes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'cartao-fatura-parcial' %}">
+              <i class="bi bi-circle"></i><span>Fatura Parcial</span>
+            </a>
+          </li>
+          
+          <li>
+            <a href="{% url 'cartao-nova-despesa' %}">
+              <i class="bi bi-circle"></i><span>Nova Despesa</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Editar Despesa</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Estornar Despesa</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Excluir Despesa</span>
+            </a>
+          </li> -->
+          <li>
+            <a>
+              <span>----------------------</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lista-cartoes' %}">
+              <i class="bi bi-circle"></i><span>Exibir Cartões</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'cadastrar-cartao' %}">
+              <i class="bi bi-circle"></i><span>Novo Cartão</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- End Cartões Nav -->
+
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse">
+          <i class="bi bi-piggy-bank"></i><span>Investimento</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                
+          <li>
+            <a href="{% url 'cadastrar-investimento-rf' %}">
+              <i class="bi bi-circle"></i><span>Investir em Renda Fixa</span>
+            </a>
+          </li> 
+          <li>
+            <a href="{% url 'cadastrar-investimento-rv' %}">
+              <i class="bi bi-circle"></i><span>Investir em Renda Variável</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'cadastrar-investimento-prev' %}">
+              <i class="bi bi-circle"></i><span>Investir em Previdência Privada</span>
+            </a>
+          </li>  
+          <li>
+            <a>
+              <span>----------------------</span>
+            </a>
+          </li>   
+          <!-- <li>
+            <a href="{% url 'lista-investimentos' %}">
+              <i class="bi bi-circle"></i><span>Exibir Todos Investimentos</span>
+            </a>
+          </li>  -->
+          <li>
+            <a href="{% url 'lista-investimento-rf' %}">
+              <i class="bi bi-circle"></i><span>Exibir Renda Fixa</span>
+            </a>
+          </li>   
+          <li>
+            <a href="{% url 'lista-investimento-rv' %}">
+              <i class="bi bi-circle"></i><span>Exibir Renda Variável</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'lista-investimento-prev' %}">
+              <i class="bi bi-circle"></i><span>Exibir Previdência</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li><!-- End Investimentos Nav -->
+
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse">
+          <i class="bi bi-clipboard-pulse"></i><span>Relatório</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a>
+              <i class="bi bi-circle"></i><span>Em Construção...</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Receitas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Despesas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Investimentos</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="bi bi-circle"></i><span>Extratos</span>
+            </a>
+          </li> -->
+        </ul>
+      </li><!-- End Relatórios Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse">
+          <i class="bi bi-gear-fill"></i><span>Contas</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <!-- <li>
+            <a href="{% url 'cadastrar-conta' %}">
+              <i class="bi bi-circle"></i><span>Nova Conta Bancária</span>
+            </a>
+          </li>
+          
+          <li>
+            <a href="{% url 'cadastrar-corretora' %}">
+              <i class="bi bi-circle"></i><span>Nova Corretora</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'cadastrar-conta-previdencia-privada' %}">
+              <i class="bi bi-circle"></i><span>Nova Conta de Previdência</span>
+            </a>
+          </li>
+
+          <li>
+            <a>
+              <span>----------------------</span>
+            </a>
+          </li> -->
+
+          <li>
+            <a href="{% url 'lista-contas' %}">
+              <i class="bi bi-circle"></i><span>Contas Bancárias</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'lista-contas-previdencia-privada' %}">
+              <i class="bi bi-circle"></i><span>Contas de Previdência</span>
+            </a>
+          </li>
+          
+          <li>
+            <a href="{% url 'lista-corretoras' %}">
+              <i class="bi bi-circle"></i><span>Corretoras de Investimento</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li><!-- End Configurações Nav -->
+
+    </ul>
+    {% endif %}
+</aside>
+  

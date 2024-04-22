@@ -1,0 +1,206 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="card-title">Cartões de Crédito</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Cartões de Crédito</li>
+                <li class="breadcrumb-item active">Cadastrar Despesa</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Nova Despesa</h5>
+
+            <!-- General Form Elements -->
+            <form id="escolherCartao" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <label for="data" class="col-sm-2 col-form-label">Data do Débito:</label>
+                    <div class="col-sm-10">
+                        <input type="date" id="data_debito" name="data_debito" required class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="valor" class="col-sm-2 col-form-label">Valor (R$):</label>
+                    <div class="col-sm-10"> 
+                        <input type="number" id="valor" name="valor" step="0.01" required class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="descricao" class="col-sm-2 col-form-label">Descrição:</label>
+                    <div class="col-sm-10"> 
+                        <input type="text" id="descricao" name="descricao" required class="form-control">
+                    </div>
+                </div>  
+                
+                <div class="row mb-3">
+                    <label for="categoria" class="col-sm-2 col-form-label">Categoria:</label>
+                    <div class="col-sm-10">
+                        <select id="categoria" name="categoria" required class="form-select" aria-label="Default select example">
+                            <option disabled selected>Selecione a categoria</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}">{{ categoria.descricao }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3" id="cartaoSection">
+                    <label for="cartao" class="col-sm-2 col-form-label">Cartão de Crédito:</label>
+                    <div class="col-sm-10">
+                        <select id="cartao" name="cartao" required class="form-select" aria-label="Default select example">
+                            <option disabled selected>Selecione o cartão</option>
+                            {% for cartao in cartoes %}
+                                <option value="{{ cartao.id }}">{{ cartao.descricao }}</option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                </div>
+                <input type="hidden" id="cartao_selecionado" name="cartao_selecionado">
+
+                <div class="row mb-3" id="opcaoSection" style="display:none;">
+                    <label for="opcao" class="col-sm-2 col-form-label">Fatura (falta lógica para filtrar faturas.):</label>
+                    <div class="col-sm-10">
+                        <select id="opcao" name="opcao" required class="form-select" aria-label="Default select example">
+                            <option disabled selected hidden>Selecione a fatura</option>
+                            {% for fatura in faturas %}
+                                {% if fatura.cartao_id == cartao.id %}
+                                    <option value="{{ fatura.id }}">{{ fatura.descricao }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <label for="id_parcelas" class="col-sm-2 col-form-label">Nº de Parcelas:</label>
+                    <div class="col-sm-10">
+                        <input type="number" id="qtd_parcelas" name="qtd_parcelas" min="1" max="62" value="1" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Cadastrar Despesa</button>
+                    </div>
+                </div>
+
+            </form><!-- End General Form Elements -->
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Captura os elementos do DOM
+        var cartaoSelect = document.getElementById('cartao');
+        var opcaoSection = document.getElementById('opcaoSection');
+        var opcaoSelect = document.getElementById('opcao');
+        var cartaoSelecionadoInput = document.getElementById('cartao_selecionado');
+
+        // Armazena as opções originais do select de faturas
+        var opcaoOptions = opcaoSelect.innerHTML;
+
+        // Adiciona um evento de mudança ao primeiro select
+        cartaoSelect.addEventListener('change', function () {
+            // Limpa as opções do select de faturas
+            opcaoSelect.innerHTML = opcaoOptions;
+
+            // Verifica se o cartão selecionado não está vazio
+            if (cartaoSelect.value !== '') {
+                // Filtra as opções do select de faturas com base no cartão selecionado
+                var cartaoId = cartaoSelect.value;
+                for (var i = 0; i < opcaoSelect.options.length; i++) {
+                    var faturaCartaoId = opcaoSelect.options[i].getAttribute('data-cartao-id');
+                    if (faturaCartaoId !== cartaoId) {
+                        opcaoSelect.options[i].remove();
+                    }
+                }
+
+                // Mostra o select de opções se um cartão foi selecionado
+                opcaoSection.style.display = 'block';
+            } else {
+                // Oculta o select de opções se nenhum cartão foi selecionado
+                opcaoSection.style.display = 'none';
+                // Reseta o valor do campo oculto
+                cartaoSelecionadoInput.value = '';
+            }
+        });
+
+        // Adiciona um evento de mudança ao segundo select
+        opcaoSelect.addEventListener('change', function () {
+            // Verifica se a opção selecionada não está vazia
+            if (opcaoSelect.value !== '') {
+                // Atualiza o valor do campo oculto com o valor selecionado do segundo select
+                cartaoSelecionadoInput.value = cartaoSelect.value;
+            } else {
+                // Reseta o valor do campo oculto se nenhuma opção foi selecionada
+                cartaoSelecionadoInput.value = '';
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Captura os elementos do DOM
+        var cartaoSelect = document.getElementById('cartao');
+        var opcaoSection = document.getElementById('opcaoSection');
+        var opcaoSelect = document.getElementById('opcao');
+        var cartaoSelecionadoInput = document.getElementById('cartao_selecionado');
+
+        // Armazena as opções originais do select de faturas
+        var opcaoOptions = opcaoSelect.innerHTML;
+
+        // Adiciona um evento de mudança ao primeiro select
+        cartaoSelect.addEventListener('change', function () {
+            // Verifica se o cartão selecionado não está vazio
+            if (cartaoSelect.value !== '') {
+                // Mostra o select de opções se um cartão foi selecionado
+                opcaoSection.style.display = 'block';
+                
+                // Limpa as opções do select de faturas, exceto o explicativo
+                opcaoSelect.innerHTML = '<option disabled selected hidden>Selecione a fatura</option>';
+
+                // Filtra as opções do select de faturas com base no cartão selecionado
+                var cartaoId = cartaoSelect.value;
+                for (var i = 0; i < opcaoOptions.options.length; i++) {
+                    var faturaCartaoId = opcaoOptions.options[i].getAttribute('data-cartao-id');
+                    if (faturaCartaoId === cartaoId) {
+                        opcaoSelect.innerHTML += opcaoOptions.options[i].outerHTML;
+                    }
+                }
+            } else {
+                // Oculta o select de opções se nenhum cartão foi selecionado
+                opcaoSection.style.display = 'none';
+                // Reseta o valor do campo oculto
+                cartaoSelecionadoInput.value = '';
+            }
+        });
+
+        // Adiciona um evento de mudança ao segundo select
+        opcaoSelect.addEventListener('change', function () {
+            // Verifica se a opção selecionada não está vazia
+            if (opcaoSelect.value !== '') {
+                // Atualiza o valor do campo oculto com o valor selecionado do segundo select
+                cartaoSelecionadoInput.value = cartaoSelect.value;
+            } else {
+                // Reseta o valor do campo oculto se nenhuma opção foi selecionada
+                cartaoSelecionadoInput.value = '';
+            }
+        });
+
+    });
+</script> -->

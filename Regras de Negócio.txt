@@ -1,0 +1,15 @@
+--------------- REGRAS DE NEGÓCIO --------------
+
+******** Receitas:
+- Só será permitido Editar uma Receita se ela estiver no status "Registrado". Se ela estiver "Efetivado" o usuário precisa "Devolver" a Receita e aparecerá a opção para "Editar" a Receita no index_receitas;
+
+- O cadastro inicial de receitas recorrentes sempre será no status "Registrado".
+
+
+
+
+******** Despesas: 
+- Só será permitido Editar uma Despesa se ela estiver no status "Registrado". Se ela estiver "Efetivado" o usuário precisa "Estornar" a Despesa e aparecerá a opção para "Editar" a Despesa no index_despesas;
+
+******** Cartão de Crédito:
+- Não é permitido inserir uma despesa no cartão de crédito numa fatura Fechada ou Paga. Permitido apenas em Fatura Aberta.

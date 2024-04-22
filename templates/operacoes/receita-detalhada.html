@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %} 
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="card-title">Receitas</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Receitas</li>
+                <li class="breadcrumb-item active">Lista de Receitas</li>
+            </ol>
+        </nav>   
+            
+        <div class="card">
+            <!-- <div class="card-body">
+                <h5 class="card-title">Despesa Detalhada</h5>    
+            </div> -->
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Receita {{ condicao }}</h5>                   
+                    
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Status</th>
+                                <td style="background-color: {{ cor }}"> {{ condicao }} </td>
+                            </tr>
+                            <tr>
+                                <th>Data</th>
+                                <td><span style="user-select: none;">{{ receita.data|date:"d/m/Y" }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Valor R$</th>
+                                <td>{{ receita.valor }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descrição</th>
+                                <td>{{ receita.descricao }}</td>
+                            </tr>
+                            <tr>
+                                <th>Categoria</th>
+                                <td>{{ receita.categoria }}</td>
+                            </tr>
+                            <tr>
+                                <th>Conta Crédito</th>
+                                <td>{{ receita.conta_credito }}</td>
+                            </tr>
+                            <tr>
+                                <th>Crédito Efetivado</th>
+                                <td>{{ receita.get_credito_ja_realizado_display }}</td>
+                            </tr>
+                            <tr>
+                                <th>Proprietário</th>
+                                <td>{{ receita.proprietario }}</td>
+                            </tr>
+                            <tr>
+                                <th>Registro no Sistema</th>
+                                <td>{{ receita.data_registro|date:"d/m/Y" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+
+                <div style="display: flex; padding: 10;">
+                    <div style="display: flex; padding: 10;">
+                        {% if receita.receita_status == 'Efetivado' %}
+                            <a href="{% url 'receita-devolver' receita.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px; margin-left: 20px;">Devolver</button></a>
+                            <a href="{% url 'receita-deletar' receita.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 50px;">Deletar</button></a>
+                        {% else %}    
+                            <a href="{% url 'receita-efetivar' receita.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px; margin-left: 10px;">Efetivar</button></a><br>
+                            <a href="{% url 'receita-editar' receita.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 10px;">Editar</button></a><br>
+                            <a href="{% url 'receita-deletar' receita.id %}"><button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px; margin-right: 50px;">Deletar</button></a>
+                        {% endif %}    
+                    </div>
+                    
+                    <a href="{% url 'lista-receitas' %}" style="margin-right: 10px;">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" style="padding: 5px 15px; background-color: cadetblue; color: black;">Retornar</button>
+                    </a>
+                </div>
+            </div>           
+        </div>
+    </div> 
+</main>
+{% endblock %}

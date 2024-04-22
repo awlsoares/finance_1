@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Categorias de Receitas</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item">Receitas</li>
+                  <li class="breadcrumb-item active">Lista de Categorias</li>
+                </ol>
+            </nav>   
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Categorias de Receitas</h5>               
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Descrição</th>
+                            <!-- <th scope="col">Proprietário</th> -->
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for categorias_cadastradas in lista_categorias %}
+                    <tbody>
+                        <tr>
+                            <!-- <th scope="row">{{ categorias_cadastradas.id }}</th> -->
+                            <td>{{ categorias_cadastradas.descricao }}</td>
+                            <!-- <td>{{ categorias_cadastradas.proprietario }}</td> -->
+                            <td>
+                                <a href="{% url 'editar-categoria-receita' categorias_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a>
+                                <a href="{% url 'deletar-categoria-receita' categorias_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                            </td> 
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">
+            <a href="{% url 'cadastrar-categoria-rec' %}" style="text-decoration: none; color: #fff;">+ Cadastrar Nova Categoria</a>
+        </div>       
+
+    </main>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos em Renda Fixa</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item">Investimentos</li>
+                  <li class="breadcrumb-item">Renda Fixa</li>
+                  <li class="breadcrumb-item active">Editar Investimento</li>
+                </ol>
+            </nav>
+        </div> 
+
+        <div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Editar Investimento em Renda Fixa</h5>
+                <form id="investimentoForm" action="{% url 'rf-editar' investimento_rf_id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                        {% for field in form_editar_investimento.visible_fields %}
+                        <div class="row mb-3">
+                            <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                            <div class="col-sm-10">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Editar Investimento</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </main>>
+
+    <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            // Adicione um identificador aos campos de data para facilitar a seleção
+            var dataInvestimentoField = $('#id_data_investimento');
+            var dataVencimentoField = $('#id_data_vencimento');
+
+            // Adicione um manipulador de eventos ao campo de data de vencimento
+            dataVencimentoField.change(function(){
+                // Obter valores das datas
+                var dataInvestimento = dataInvestimentoField.val();
+                var dataVencimento = dataVencimentoField.val();
+
+                // Converter para objetos Date
+                var dateInvestimento = new Date(dataInvestimento);
+                var dateVencimento = new Date(dataVencimento);
+
+                // Verificar se data_vencimento é após data_investimento
+                if (dateVencimento <= dateInvestimento) {
+                    alert('A data de vencimento deve ser posterior à data de investimento.');
+                    // Você pode adicionar outras ações aqui, como limpar o campo ou mostrar uma mensagem na interface.
+                }
+            });
+
+            // Mantenha o código anterior para a verificação no clique do botão, caso o usuário tente enviar sem selecionar a segunda data
+            $('#submitButton').click(function(event){
+                // Evitar envio padrão do formulário
+                event.preventDefault();
+
+                // Obter valores das datas
+                var dataInvestimento = dataInvestimentoField.val();
+                var dataVencimento = dataVencimentoField.val();
+
+                // Converter para objetos Date
+                var dateInvestimento = new Date(dataInvestimento);
+                var dateVencimento = new Date(dataVencimento);
+
+                // Verificar se data_vencimento é após data_investimento
+                if (dateVencimento <= dateInvestimento) {
+                    alert('A data de vencimento deve ser posterior à data de investimento.');
+                    // Ou você pode adicionar uma mensagem de erro no HTML ou fazer qualquer outra ação desejada.
+                } else {
+                    // Envie o formulário se a validação passar
+                    $('#investimentoForm').submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

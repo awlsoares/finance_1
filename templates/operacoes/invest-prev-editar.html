@@ -1,0 +1,37 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Investimentos em Previdência Privada</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                  <li class="breadcrumb-item">Investimentos</li>
+                  <li class="breadcrumb-item">Previdência Privada</li>
+                  <li class="breadcrumb-item active">Editar Investimento</li>
+                </ol>
+            </nav>
+        </div> 
+
+        <div class="card">
+			<div class="card-body">
+				<h5 class="card-title">Editar Investimento em Previdência Privada</h5>
+                <form id="investimentoForm" action="{% url 'prev-editar' investimento_prev_id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                        {% for field in form_editar_investimento.visible_fields %}
+                        <div class="row mb-3">
+                            <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">{{field.label}}</label>
+                            <div class="col-sm-10">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Editar Investimento</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </main>>
+{% endblock %}

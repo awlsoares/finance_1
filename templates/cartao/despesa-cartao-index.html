@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %} 
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1 class="card-title">Cartões de Crédito</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item">Cartão de Crédito</li>
+                <li class="breadcrumb-item active">Lista de Despesas</li>
+            </ol>
+        </nav>   
+            
+            <div class="card">
+                <div class="card-body">
+                    <form id="escolherFiltros" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <h5 class="card-title">
+                            <!-- Filtrar Status: -->
+                                <select id="cartao" name="cartao" required aria-label="Default select example">
+                                    <option disabled selected>Cartão</option> 
+                                    {% for cartao in cartoes %}
+                                        <option value="{{ cartao.id }}">{{ cartao.descricao }}</option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <select id="opcao" name="opcao" required aria-label="Default select example">
+                                    <option disabled selected hidden>Fatura</option>
+                                    {% for fatura in faturas %}
+                                        {% if fatura.cartao_id == cartao.id %}
+                                            <option value="{{ fatura.id }}">{{ fatura.descricao }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+
+                                <button type="submit" class="btn btn-primary">Filtrar</button> 
+                                <a href="{% url 'cartao-fatura-parcial' %}"><button type="button" class="btn btn-outline-secondary btn-sm">Reset</button></a>
+                            </h5>  
+                    </form>
+                </nav>   
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Lista de Despesas - {{ hoje }}</h5> 
+                                        
+    
+                  <!-- Table with stripped rows -->
+                  <table class="table table-hover" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Data</th>
+                            <th scope="col">Valor R$</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Cartão</th>
+                            <th scope="col">Fatura</th>
+                        </tr>
+                    </thead>
+
+                    {% for despesas_cadastradas in lista_despesas %}
+                        <tbody>
+                            <tr>
+                                <td>{{ despesas_cadastradas.data|date:"d/m/Y" }}</td>
+                                <td>{{ despesas_cadastradas.valor }}</td>
+                                <td>
+                                    <a href="#">
+                                        {{ despesas_cadastradas.descricao }}    
+                                    </a>
+                                </td>
+                                <td>{{ despesas_cadastradas.categoria }}</td>
+                                <td>{{ despesas_cadastradas.qual_cartao }}</td>
+                                <td style="width: 10px; background-color: {{ despesas_cadastradas.cor }}; text-align: center">
+                                    {{ despesas_cadastradas.qual_fatura|date:"d/m/Y" }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

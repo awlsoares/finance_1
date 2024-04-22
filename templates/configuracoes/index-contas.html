@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1 class="card-title">Contas Bancárias</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item">Contas Bancárias</li>
+                    <li class="breadcrumb-item active">Lista de Contas Bancárias</li>
+                </ol>
+            </nav>   
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Contas Bancárias</h5>               
+
+                <!-- Table with stripped rows -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th scope="col">ID</th> -->
+                            <th scope="col">Saldo R$</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Dashboard</th>
+                            <th scope="col">Proprietário</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+
+                    {% for contas_cadastradas in lista_contas %}
+                        <tbody>
+                            <tr>
+                                <!-- <th scope="row">{{ contas_cadastradas.id }}</th> -->
+                                <td>{{ contas_cadastradas.saldo }}</td>
+                                <td>{{ contas_cadastradas.tipo }}</td>
+                                <td>{{ contas_cadastradas.descricao }}</td>
+                                <td>
+                                    {% if contas_cadastradas.incluir_saldo_no_dashboard == True %}
+                                        Sim
+                                    {% else %}
+                                        Não
+                                    {% endif %} 
+                                </td>
+                                <td>{{ contas_cadastradas.proprietario }}</td>
+                                <td>
+                                    <a href="{% url 'editar-conta' contas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Editar</button></a>
+                                    <a href="{% url 'deletar-conta' contas_cadastradas.id %}"><button type="button" class="btn btn-outline-secondary btn-sm">Deletar</button></a>
+                                </td> 
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; transition: background-color 0.3s;">
+            <a href="{% url 'cadastrar-conta' %}" style="text-decoration: none; color: #fff;">+ Cadastrar Nova Conta Bancária</a>
+        </div>
+
+    </main>
+{% endblock %}

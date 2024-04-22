@@ -1,0 +1,105 @@
+Testar o comando CTRL + L
+
+########### Navega para a pasta
+"cd caminho/para/seu/diretorio"
+
+########### Cria o Ambiente Virtual 
+Uma vez no diretório desejado, você pode criar o ambiente virtual usando o módulo venv do Python. Execute o seguinte comando no terminal:
+"python3 -m venv nome_do_ambiente" (usar este comando preferencialmente)
+"virtualenv -p python3 venv" (para usar este comando precisa antes instalar a virtualenv com "")
+
+
+########### Ativa o ambiente virtual 
+Uma vez no diretório do seu ambiente virtual, você verá uma pasta chamada "venv" (ou o nome que você escolheu para o seu ambiente virtual). Você precisa ativar o ambiente virtual executando o script de ativação. O nome do script de ativação pode variar dependendo do shell que você está usando (bash, zsh, etc.).
+
+Se você estiver usando o bash, o comando para ativar o ambiente virtual é: "source venv/bin/activate" (usar este comando preferencialmente. ver se precisa de activate.fish)
+Se você estiver usando o zsh, o comando para ativar o ambiente virtual é: "source venv/bin/activate.zsh"
+Se você estiver usando o windows, o comando para ativar o ambiente virtual é: "venv\Scripts\Activate"
+
+########### Atualizar o pip
+"pip install --upgrade pip"
+
+########### Instalação do Django
+"pip install django" 	
+
+########### Cria dependências do projeto
+"pip freeze > requirements.txt"
+
+########### Cria o Projeto Django
+"django-admin startproject setup ."
+
+########### Roda o servidor
+"python manage.py runserver"
+
+########### SECRET_KEY
+Em "setup > settings.py", achar SECRET_KEY = 'django-insecure...', copia a chave deixando apenas SECRET_KEY = ''
+
+########### Instalar dotoenv
+"pip install python-dotenv"
+
+########### Criar o arquivo ".env" na raiz principal do projeto e cola 
+SECRET_KEY = django-insecure... (Importante: sem as aspas)
+
+########### Na linha 13, onde importamos Path, vamos importar também o os, utilizando from dotenv import load_dotenv.
+
+from pathlib import Path, os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+########### Trocar SECRET_KEY = '' por str(os.getenv('SECRET_KEY'))
+
+########### Criar app
+python manage.py startapp nome_do_app
+
+########### Informar em setup a criação (instalação) do app nome_do_app
+Acessar "setup > settings.py", no item "INSTALLED_APPS" incluir o nome_do_app
+**INSTALLED_APPS** = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'nome_do_app',
+]
+
+########### Isolar as urls
+1) Dentro da pasta "setup" abri o arquivo urls.py e incluir as informações abaixo:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('cartoes.urls')),
+	path('', include('configuracoes.urls')),
+	path('', include('operacoes.urls')),
+	...
+	path('', include('usuarios.urls')),]
+
+
+2) Dentro da pasta nome_do_app criar o arquivo urls.py
+
+Dentro do arquivo urls.py criado incluir as rotas específicas do app, exemplo para o app usuarios:
+
+from django.urls import path
+from apps.usuarios.views import login, cadastro, logout
+
+urlpatterns = [
+    path('login', login, name='login'),
+    path('cadastro', cadastro, name='cadastro'),
+    path('logout', logout, name='logout'),]
+
+########### Isolar os TEMPLATES
+1) Na raiz principal do projeto criar a pasta templates
+2) Acessar "setup > settings.py" e rolar a página até a seção TEMPLATES
+3) Informar onde ficarão os códigos html: 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+4) 
+
+
+
+
+
+
+
