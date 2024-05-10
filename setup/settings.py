@@ -28,12 +28,12 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['wildevcode.com.br','www.wildevcode.com.br'] # Quais domínios podem acessar a aplicação. Ex: ['wildevcode.com.br',]
-CSRF_TRUSTED_ORIGINS = [
-    'https://www.wildevcode.com.br', 
-    'https://wildevcode.com.br',
-    '62.72.63.178'
-    ]
+ALLOWED_HOSTS = ['wildevcode.com.br','www.wildevcode.com.br', '127.0.0.1'] # Quais domínios podem acessar a aplicação. Ex: ['wildevcode.com.br',]
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://www.wildevcode.com.br', 
+#     'https://wildevcode.com.br',
+#     '62.72.63.178',
+#     ]
 
 # Application definition
 

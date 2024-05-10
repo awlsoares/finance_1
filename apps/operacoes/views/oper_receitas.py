@@ -6,6 +6,10 @@ from apps.configuracoes.models import Conta, CategoriaReceita
 from apps.operacoes.models import Receita
 from apps.operacoes.forms import ReceitaForms
 from django.db.models import Case, Value, When, CharField
+import locale
+
+# Defina a localização para Português do Brasil (pt_BR)
+locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 # ----------------------------- Receitas ------------------------------------
 
@@ -140,6 +144,140 @@ def receitas_futuras(request):
     lista = condicao_cores_receitas(receitas_futuras)
 
     return render(request, 'operacoes/receita-index.html', {"lista_receitas": lista, 'hoje': hoje})
+
+
+def receitas_do_mes_atual(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Usuário não logado!")
+        return redirect('login')
+    
+    mes_atual = datetime.now().month
+    hoje = datetime.now().date()
+    nome_mes = datetime.strptime(str(mes_atual), "%m").strftime("%B")
+
+    if request.user.is_authenticated and request.user.is_superuser:
+        receitas_do_mes = Receita.objects.order_by("proprietario").filter(data__month=mes_atual, data__year=hoje.year)
+    else:
+        receitas_do_mes = Receita.objects.order_by("data").filter(proprietario_id=request.user, data__month=mes_atual, data__year=hoje.year)
+
+    # Cores
+    verde = '#AFF6A6'
+    vermelho = '#F49185'
+    amarelo = '#F6f66f' 
+    azul = '#9EDEF0'
+
+    # Atribui cores às receitas com base na data usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        cor=Case(
+            When(receita_status='Efetivado', then=Value(verde)),
+            When(data__lt=hoje, then=Value(vermelho)),
+            When(data=hoje, then=Value(amarelo)),
+            default=Value(azul),
+            output_field=CharField(), 
+        )
+    )
+
+    # Atribui condição às receitas com base nas cores usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        condicao=Case(
+            When(cor=verde, then=Value('Paga')),
+            When(cor=vermelho, then=Value('Atrasada')),
+            When(cor=amarelo, then=Value('Hoje')),
+            default=Value('Futura'),
+            output_field=CharField(),
+        )
+    )
+
+    return render(request, 'operacoes/receita-index.html', {"lista_receitas": receitas_do_mes, 'hoje': nome_mes})
+
+def receitas_do_mes_anterior(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Usuário não logado!")
+        return redirect('login')
+    
+    mes_anterior = datetime.now().month - 1
+    hoje = datetime.now().date()
+    nome_mes = datetime.strptime(str(mes_anterior), "%m").strftime("%B")
+
+    if request.user.is_authenticated and request.user.is_superuser:
+        receitas_do_mes = Receita.objects.order_by("proprietario").filter(data__month=mes_anterior, data__year=hoje.year)
+    else:
+        receitas_do_mes = Receita.objects.order_by("data").filter(proprietario_id=request.user, data__month=mes_anterior, data__year=hoje.year)
+
+    # Cores
+    verde = '#AFF6A6'
+    vermelho = '#F49185'
+    amarelo = '#F6f66f' 
+    azul = '#9EDEF0'
+
+    # Atribui cores às receitas com base na data usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        cor=Case(
+            When(receita_status='Efetivado', then=Value(verde)),
+            When(data__lt=hoje, then=Value(vermelho)),
+            When(data=hoje, then=Value(amarelo)),
+            default=Value(azul),
+            output_field=CharField(), 
+        )
+    )
+
+    # Atribui condição às receitas com base nas cores usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        condicao=Case(
+            When(cor=verde, then=Value('Paga')),
+            When(cor=vermelho, then=Value('Atrasada')),
+            When(cor=amarelo, then=Value('Hoje')),
+            default=Value('Futura'),
+            output_field=CharField(),
+        )
+    )
+
+    return render(request, 'operacoes/receita-index.html', {"lista_receitas": receitas_do_mes, 'hoje': nome_mes})
+
+def receitas_do_mes_proximo(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Usuário não logado!")
+        return redirect('login')
+    
+    mes_proximo = datetime.now().month + 1
+    hoje = datetime.now().date()
+    nome_mes = datetime.strptime(str(mes_proximo), "%m").strftime("%B")
+
+
+    if request.user.is_authenticated and request.user.is_superuser:
+        receitas_do_mes = Receita.objects.order_by("proprietario").filter(data__month=mes_proximo, data__year=hoje.year)
+    else:
+        receitas_do_mes = Receita.objects.order_by("data").filter(proprietario_id=request.user, data__month=mes_proximo, data__year=hoje.year)
+
+    # Cores
+    verde = '#AFF6A6'
+    vermelho = '#F49185'
+    amarelo = '#F6f66f' 
+    azul = '#9EDEF0'
+
+    # Atribui cores às receitas com base na data usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        cor=Case(
+            When(receita_status='Efetivado', then=Value(verde)),
+            When(data__lt=hoje, then=Value(vermelho)),
+            When(data=hoje, then=Value(amarelo)),
+            default=Value(azul),
+            output_field=CharField(), 
+        )
+    )
+
+    # Atribui condição às receitas com base nas cores usando annotate
+    receitas_do_mes = receitas_do_mes.annotate(
+        condicao=Case(
+            When(cor=verde, then=Value('Paga')),
+            When(cor=vermelho, then=Value('Atrasada')),
+            When(cor=amarelo, then=Value('Hoje')),
+            default=Value('Futura'),
+            output_field=CharField(),
+        )
+    )
+
+    return render(request, 'operacoes/receita-index.html', {"lista_receitas": receitas_do_mes, 'hoje': nome_mes})
 
 #ok
 def nova_receita(request):
@@ -404,7 +542,7 @@ def receita_detalhada(request, receita_id):
         messages.error(request, 'Não é possível acessar Receitas de outros usuários.')
         return redirect('lista-receitas')
    
-    #form = DespesaForms(request.user, instance=receita_para_detalhar)
+    #form = receitaForms(request.user, instance=receita_para_detalhar)
     
     hoje = datetime.now().replace(hour=0, minute=0, second=1, microsecond=999999).date()
     data_da_receita = receita_para_detalhar.data.replace(hour=23, minute=59, second=59, microsecond=999999).date()
