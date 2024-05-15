@@ -5,16 +5,16 @@ from apps.operacoes.models import Receita, Despesa, InvestimentoRendaFixa, Inves
 from apps.configuracoes.forms import ContaForms
 from datetime import timedelta
 
-def index(request):
-        if not request.user.is_authenticated:
-                #messages.error(request, "Usuário não logado!")
+# def index(request):
+#         if not request.user.is_authenticated:
+#                 #messages.error(request, "Usuário não logado!")
                 
-                mensagem_tipo = "erro"
-                mensagem_conteudo = "Usuário não logado!"
-                return redirect('login')
-                #return render(request, 'usuarios/login.html', {"mensagem_tipo": mensagem_tipo, "mensagem_conteudo": mensagem_conteudo})
+#                 mensagem_tipo = "erro"
+#                 mensagem_conteudo = "Usuário não logado!"
+#                 return redirect('login')
+#                 #return render(request, 'usuarios/login.html', {"mensagem_tipo": mensagem_tipo, "mensagem_conteudo": mensagem_conteudo})
         
-        return render(request, 'base/index_base.html')
+#         return render(request, 'base/index_base.html')
              
 def contas(request):
         

@@ -180,7 +180,7 @@ def receitas_do_mes_atual(request):
     # Atribui condição às receitas com base nas cores usando annotate
     receitas_do_mes = receitas_do_mes.annotate(
         condicao=Case(
-            When(cor=verde, then=Value('Paga')),
+            When(cor=verde, then=Value('Creditada')),
             When(cor=vermelho, then=Value('Atrasada')),
             When(cor=amarelo, then=Value('Hoje')),
             default=Value('Futura'),
@@ -224,7 +224,7 @@ def receitas_do_mes_anterior(request):
     # Atribui condição às receitas com base nas cores usando annotate
     receitas_do_mes = receitas_do_mes.annotate(
         condicao=Case(
-            When(cor=verde, then=Value('Paga')),
+            When(cor=verde, then=Value('Creditada')),
             When(cor=vermelho, then=Value('Atrasada')),
             When(cor=amarelo, then=Value('Hoje')),
             default=Value('Futura'),
@@ -269,7 +269,7 @@ def receitas_do_mes_proximo(request):
     # Atribui condição às receitas com base nas cores usando annotate
     receitas_do_mes = receitas_do_mes.annotate(
         condicao=Case(
-            When(cor=verde, then=Value('Paga')),
+            When(cor=verde, then=Value('Creditada')),
             When(cor=vermelho, then=Value('Atrasada')),
             When(cor=amarelo, then=Value('Hoje')),
             default=Value('Futura'),

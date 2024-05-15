@@ -376,6 +376,52 @@ def despesas_futuras(request):
 
     return render(request, 'operacoes/despesa-index.html', {"lista_despesas": despesas_futuras})
 
+#ok
+def despesas_futuras_mes_atual(request):
+    hoje=date.today()
+    if not request.user.is_authenticated:
+        messages.error(request, "Usuário não logado!")
+        return redirect('login')
+               
+    if request.user.is_authenticated and request.user.is_superuser:
+        despesas_futuras = Despesa.objects.order_by("proprietario").filter(debito_ja_realizado='Não', data__month=hoje.month, data__gte=hoje)
+    
+    else:
+        despesas_futuras = Despesa.objects.order_by("data").filter(proprietario_id=request.user, data__month=hoje.month, debito_ja_realizado='Não', data__gte=hoje)    
+
+    # Define a data de hoje
+    hoje = datetime.now().date()
+
+    # Cores
+    verde = '#AFF6A6'
+    vermelho = '#F49185'
+    amarelo = '#F6f66f' 
+    azul = '#9EDEF0'
+
+    # Atribui cores às despesas com base na data usando annotate
+    despesas_futuras = despesas_futuras.annotate(
+        cor=Case(
+            When(despesa_status='Efetivado', then=Value(verde)),
+            When(data__lt=hoje, then=Value(vermelho)),
+            When(data=hoje, then=Value(amarelo)),
+            default=Value(azul),
+            output_field=CharField(), 
+        )
+    )
+
+    # Atribui condição às despesas com base nas cores usando annotate
+    despesas_futuras = despesas_futuras.annotate(
+        condicao=Case(
+            When(cor=verde, then=Value('Paga')),
+            When(cor=vermelho, then=Value('Atrasada')),
+            When(cor=amarelo, then=Value('Hoje')),
+            default=Value('Futura'),
+            output_field=CharField(),
+        )
+    )
+
+    return render(request, 'operacoes/despesa-index.html', {"lista_despesas": despesas_futuras})
+
 def despesas_do_mes_atual(request):
     if not request.user.is_authenticated:
         messages.error(request, "Usuário não logado!")

@@ -1,3 +1,4 @@
+from .config_index import *
 from .config_cartao import *
 from .config_categorias_despesas import *
 from .config_categorias_receitas import *

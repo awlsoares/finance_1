@@ -13,10 +13,438 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
+    <section class="section Dashboard">
       <div class="row">
 
 
+        <!-- Velocímetro % Consumo da Receita - Moderno-->
+        <div class="col-xxl-4 col-md-6">
+          <div id="radialBarChart"></div>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              let consumo = {{ consumo_receita|safe }};
+              let mes_atual_2 = new Date().getMonth() + 1;
+              var options = {
+                // series: [75],
+                series: consumo,
+                chart: {
+                height: 300,
+                type: 'radialBar',
+                toolbar: {
+                  show: true
+                }
+              },
+              plotOptions: {
+                radialBar: {
+                  startAngle: -135,
+                  endAngle: 225,
+                  hollow: {
+                    margin: 0,
+                    size: '60%',
+                    background: '#fff',
+                    image: undefined,
+                    imageOffsetX: 0,
+                    imageOffsetY: 0,
+                    position: 'front',
+                    dropShadow: {
+                      enabled: true,
+                      top: 3,
+                      left: 0,
+                      blur: 4,
+                      opacity: 0.24
+                    }
+                  },
+                  track: {
+                    background: '#fff',
+                    strokeWidth: '67%',
+                    margin: 0, // margin is in pixels
+                    dropShadow: {
+                      enabled: true,
+                      top: -3,
+                      left: 0,
+                      blur: 4,
+                      opacity: 0.35
+                    }
+                  },
+              
+                  dataLabels: {
+                    show: true,
+                    name: {
+                      offsetY: 35,
+                      show: true,
+                      color: '#888',
+                      fontSize: '17px'
+                    },
+                    value: {
+                      offsetY: -10, // Offset para mover o valor para baixo
+                      formatter: function(val) {
+                        return parseInt(val);
+                      },
+                      color: '#111',
+                      fontSize: '36px',
+                      show: true,
+                    }
+                  }
+                }
+              },
+              title: {
+                  text: 'Relação Despesas / Receitas - Mês ' + mes_atual_2,
+                  align: 'middle',
+                },
+              fill: {
+                type: 'gradient',
+                gradient: {
+                  shade: 'dark',
+                  type: 'horizontal',
+                  shadeIntensity: 0.5,
+                  gradientToColors: ['#4CAF50', '#FFD700', '#FF0000'], // Verde, amarelo, vermelho
+                  inverseColors: true,
+                  opacityFrom: 1,
+                  opacityTo: 1,
+                  stops: [0, 75, 100]
+                }
+              },
+              stroke: {
+                lineCap: 'round'
+              },
+              labels: ['%'],
+              };
+
+              var chart = new ApexCharts(document.querySelector("#radialBarChart"), options);
+              chart.render();
+            });
+          </script>
+        </div> <!-- End Velocímetro-->
+
+
+        <!-- Pirâmide Despesas por Categoria -->
+        <div class="col-xxl-4 col-md-6">
+          <div id="piramideChart"></div>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              let categorias = {{ cat_despesas|safe }};
+              let gasto_mensal_por_categoria = {{ gastos_por_categoria|safe }};
+              //console.log(gasto_mensal_por_categoria);
+              let mes_atual = new Date().getMonth() + 1;
+              let gasto_no_mes = [];
+
+              // Iterar sobre a matriz de arrays
+              for (let i = 0; i < gasto_mensal_por_categoria.length; i++) {
+                  // Acessar cada array interno
+                  let categoria_i = gasto_mensal_por_categoria[i];
+                  gasto_no_mes.push(categoria_i[mes_atual-1]);
+                  console.log(gasto_no_mes);
+              }
+
+              // Combinar os arrays em uma matriz de pares
+              let dados = categorias.map((categoria, index) => [categoria, gasto_no_mes[index]]);
+
+              // Ordenar a matriz com base nos valores
+              dados.sort((a, b) => a[1] - b[1]);
+
+              // Separar novamente em duas arrays
+              categorias = dados.map(item => item[0]);
+              gasto_no_mes = dados.map(item => item[1]);
+              console.log(gasto_no_mes);
+
+            
+              var options = {
+                series: [
+                {
+                  name: "",
+                  data: gasto_no_mes,
+                  //data: [200, 330, 548, 740, 880, 990, 1100, 1380],
+                },
+                ],
+                  chart: {
+                  type: 'bar',
+                  height: 350,
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 0,
+                    horizontal: true,
+                    distributed: true,
+                    barHeight: '80%',
+                    isFunnel: true,
+                  },
+                },
+                
+                dataLabels: {
+                  enabled: false,
+                  formatter: function (val, opt) {
+                    return opt.w.globals.labels[opt.dataPointIndex] 
+                  },
+                  dropShadow: {
+                    enabled: true,
+                  },
+                },
+                title: {
+                  text: 'Despesas por Categoria - Mês ' + mes_atual,
+                  align: 'middle',
+                },
+                xaxis: {
+                  categories: categorias,
+                  
+                  //['Sweets', 'Processed Foods', 'Healthy Fats', 'Meat', 'Beans & Legumes', 'Dairy', 'Fruits & Vegetables', 'Grains'],
+                },
+                legend: {
+                  show: true,
+                },
+                
+              };
+
+              var chart = new ApexCharts(document.querySelector("#piramideChart"), options);
+              chart.render();
+            });
+          </script>
+        </div> <!-- End Pirâmide-->
+
+
+        <!-- Card Despesas Pendentes e A Vencer-->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card">
+            <div>
+
+              <a href="{% url 'lista-despesas-atrasadas' %}">
+                <h5 class="card-title" style="text-align: center;">Total Despesas <br>Atrasadas</h5>   
+                <div style="display: inline-flexbox; text-align: center;">
+                  <div>
+                    <i class="bi bi-emoji-frown"></i> <h6 style="color: red; font-size: larger;"> {{ numero_despesas_atrasadas }}</h6>
+                  </div>
+                </div>
+              </a>
+
+              <a href="{% url 'lista-despesas-futuras-mes-atual' %}">
+                <h5 class="card-title" style="text-align: center;">Despesas a Vencer <br>no Mês</h5>
+                <div style="display: inline-flexbox; text-align: center;">
+                  <div>
+                    <i class="bi bi-emoji-neutral"></i> <h6 style="color: blue; font-size: larger;">{{ numero_despesas_a_vencer_no_mes_atual }}</h6>
+                  </div>
+                </div>
+              </a>
+
+            </div>
+          </div>
+        </div><!-- End Card -->
+
+
+        <!-- Gráfico Despesas por Categorias 2024 -->
+        <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Despesas por Categorias 2024</h5>
+
+              <!-- Column Chart -->
+              <div id="categoryChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  let legenda_categorias = {{ cat_despesas|safe }};
+                  let valores_categorias = {{ gastos_por_categoria|safe }};
+                    
+                  // Criando um array para armazenar as séries formatadas
+                  let series = [];
+
+                  // Iterando sobre as categorias e valores
+                  for (let i = 0; i < legenda_categorias.length; i++) {
+                    // Criando um objeto para representar a série
+                    let serie = {
+                        name: legenda_categorias[i], // Nome da série é a categoria
+                        data: valores_categorias[i]  // Valores associados à categoria
+                    };
+                    // Adicionando a série ao array de séries
+                    series.push(serie);
+                  }
+
+                  // Função para gerar cores aleatórias
+                  function gerarCoresAleatorias(totalCores) {
+                      let cores = [];
+                      for (let i = 0; i < totalCores; i++) {
+                          cores.push("#" + Math.floor(Math.random()*16777215).toString(16));
+                      }
+                      return cores;
+                  }
+
+                  new ApexCharts(document.querySelector("#categoryChart"), {
+                        
+                        series: series,
+                        chart: {
+                            height: 350,
+                            type: 'line',
+                            zoom: {
+                                enabled: false
+                            }
+                        },
+                        //colors: gerarCoresAleatorias(series.length),
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            curve: 'straight'
+                        },
+                        grid: {
+                            row: {
+                                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                                opacity: 0.5
+                            },
+                        },
+                        xaxis: {
+                            categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        }
+                    }).render();
+                });
+            </script>
+            
+              <!-- End Column Chart -->
+
+            </div>
+          </div>
+        </div> <!-- End Gráfico -->
+
+
+        
+         <!-- Gráfico Balanço Financeiro 2024 -->
+         <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Balanço Financeiro 2024</h5>
+
+              <!-- Column Chart -->
+              <div id="columnChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+
+                  // Dados de receita e despesa
+                  let receita = {{ receitas|safe }};
+                  let despesa = {{ despesas|safe }};
+                  // let receita = [44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 49, 112];
+                  // let despesa = [-76, -85, -101, -98, -87, -105, -91, -114, -94, -44, -71, -70];
+
+                  // Calcular o saldo
+                  //let saldo = [35, 41, 36, 26, 45, 48, 52, 53, 41, 43, 28, 51]
+                  let saldo = [];
+                  for (let i = 0; i < receita.length; i++) {
+                      saldo.push(receita[i] + despesa[i]);
+                  }
+
+                  // Definir as cores das séries
+                  let cores = ['#4CAF50', '#FF0000', '#0000FF'];
+
+                  new ApexCharts(document.querySelector("#columnChart"), {
+                    series: [{
+                      name: 'Receita',
+                      data: receita
+                    }, {
+                      name: 'Despesa',
+                      data: despesa
+                    }, {
+                      name: 'Saldo',
+                      data: saldo
+                    }],
+                    chart: {
+                      type: 'bar',
+                      height: 400
+                    },
+                    plotOptions: {
+                      bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                      },
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      show: true,
+                      width: 2,
+                      colors: ['transparent']
+                    },
+                    xaxis: {
+                      categories: ['Jan','Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Sey', 'Out', 'Nov', 'Dez'],
+                    },
+                    yaxis: {
+                      title: {
+                        text: 'R$'
+                      },
+                      labels: {
+                        formatter: function(val) {
+                          return "R$ " + val.toFixed(2);
+                        }
+                      }
+                    },
+                    fill: {
+                      opacity: 1
+                    },
+                    tooltip: {
+                      y: {
+                        formatter: function(val) {
+                          return "R$ " + val.toFixed(2);
+                        }
+                      }
+                    },
+                    // Definindo cores personalizadas para as séries
+                    colors: cores,
+                  }).render();
+                });
+              </script>
+              <!-- End Column Chart -->
+
+            </div>
+          </div>
+        </div> <!-- End Gráfico -->
+
+
+        <!-- Donuts Despesas por Categoria
+        <div class="col-xxl-4 col-md-6">
+          <div id="donutChart"></div>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              var options = {
+                series: [44, 55, 13, 33],
+                chart: {
+                width: 380,
+                type: 'donut',
+              },
+              dataLabels: {
+                enabled: false
+              },
+              responsive: [{
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200
+                  },
+                  legend: {
+                    show: false
+                  }
+                }
+              }],
+              legend: {
+                position: 'right',
+                offsetY: 0,
+                height: 230,
+        },
+        // Adicionando texto no centro do donut
+        annotations: {
+          title: {
+            text: 'Despesas por Categorias',
+            offsetY: 0,
+            style: {
+              fontSize: '20px',
+              color: '#000'
+            }
+          }
+        }
+      };
+
+              var chart = new ApexCharts(document.querySelector("#donutChart"), options);
+              chart.render();
+            });
+          </script>
+        </div> End Donuts-->
 
       </div>
     </section>

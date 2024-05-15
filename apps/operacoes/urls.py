@@ -40,6 +40,7 @@ urlpatterns = [
         path('despesas/efetivadas/', despesas_efetivadas, name='lista-despesas-efetivadas'),
         path('despesas/atrasadas/', despesas_atrasadas, name='lista-despesas-atrasadas'),
         path('despesas/futuras/', despesas_futuras, name='lista-despesas-futuras'),
+        path('despesas/futuras/mes-atual', despesas_futuras_mes_atual, name='lista-despesas-futuras-mes-atual'),
         path('despesas/mes-atual/', despesas_do_mes_atual, name='lista-despesas-do-mes-atual'),
         path('despesas/mes-anterior/', despesas_do_mes_anterior, name='lista-despesas-do-mes-anterior'),
         path('despesas/mes-proximo/', despesas_do_mes_proximo, name='lista-despesas-do-mes-proximo'),
