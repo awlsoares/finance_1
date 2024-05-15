@@ -21,20 +21,27 @@ def index(request):
         
         receitas, despesas, consumo = balanço_anual_e_velocimetro(request)
         
-        legenda_piramide, valores_piramide = piramide(request)
+        legenda_piramide, valores_piramide, valores_anuais_categorias = piramide(request)
         
         atrasadas = contar_todas_as_despesas_atrasadas(request)
 
         a_vencer = contar_despesas_a_vencer_no_mes_atual(request)
 
+        # [vermelho ##FF0000, amarelo #FFFF00, azul-escuro #0000FF, verde-escuro #088A08, cinza-escuro #6E6E6E, 
+        # preto #000000, azul-petroleo #086A87, laranja #FF8000, rosa #FF00FF, verde-claro #40FF00, azul-claro #00BFFF, roxo #4B088A
+        #  lilás #BE81F7, marrom #8A2908, azul-ceu #81BEF7]
+        cores = ['#00BFFF', '#FF0000', '#FFFF00', '#0000FF', '#088A08', '#6E6E6E', '#2EFEC8', '#086A87', '#FF8000', 
+                 '#FF00FF', '#4B088A', '#BE81F7', '#8A2908', '#81BEF7']
         contexto = {
              "receitas": receitas,
              "despesas": despesas,
              "consumo_receita": consumo,
              "cat_despesas": legenda_piramide,
              "gastos_por_categoria": valores_piramide,
+             "gastos_anuais_por_categoria": valores_anuais_categorias,
              "numero_despesas_atrasadas": atrasadas,
              "numero_despesas_a_vencer_no_mes_atual": a_vencer,
+             "cores": cores,
         }
 
         print(legenda_piramide)
@@ -107,7 +114,16 @@ def piramide(request):
     valores_lista = list(despesas_por_categoria.values())
     #print(valores_lista)
 
-    return descricoes_chaves, valores_lista
+    # Lista para armazenar os resultados das somas
+    somas_listas = []
+
+    # Loop para percorrer a lista de listas
+    for lista_interna in valores_lista:
+        # Calcula a soma da lista interna e adiciona à lista de somas
+        soma = sum(lista_interna)
+        somas_listas.append(soma)
+
+    return descricoes_chaves, valores_lista, somas_listas
 
 def obter_valor_receitas_mensal(request, mes, ano):
     # Filtra as receitas para o mês e ano desejados

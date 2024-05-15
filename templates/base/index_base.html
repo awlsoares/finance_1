@@ -242,6 +242,7 @@
                 document.addEventListener("DOMContentLoaded", () => {
                   let legenda_categorias = {{ cat_despesas|safe }};
                   let valores_categorias = {{ gastos_por_categoria|safe }};
+                  let cores = {{ cores|safe }}
                     
                   // Criando um array para armazenar as séries formatadas
                   let series = [];
@@ -277,6 +278,7 @@
                             }
                         },
                         //colors: gerarCoresAleatorias(series.length),
+                        colors: cores,
                         dataLabels: {
                             enabled: false
                         },
@@ -302,8 +304,76 @@
           </div>
         </div> <!-- End Gráfico -->
 
-
         
+        <!-- Pizza Chart - Despesas Anuais por Categorias 2024-->
+        <div class="card-body" style="background-color: white;">
+          <h5 class="card-title">Despesas Anuais por Categorias - 2024</h5>
+          
+          <div id="pieChart" style="min-height: 400px;" class="echart"></div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+
+              let legenda_categorias = {{ cat_despesas|safe }};
+              let valores_anuais_categorias = {{ gastos_anuais_por_categoria|safe }};
+              //let cores = {{ cores|safe }}
+                    
+              // Criando um array para armazenar as séries formatadas
+              let series = [];
+
+              // Iterando sobre as categorias e valores
+              for (let i = 0; i < legenda_categorias.length; i++) {
+                // Criando um objeto para representar a série
+                let serie = {
+                    name: legenda_categorias[i], // Nome da série é a categoria
+                    value: valores_anuais_categorias[i]  // Valores associados à categoria
+                };
+                // Adicionando a série ao array de séries
+                series.push(serie);
+              }
+
+              echarts.init(document.querySelector("#pieChart")).setOption({
+                // title: {
+                //   text: 'Referer of a Website',
+                //   subtext: 'Fake Data',
+                //   left: 'center'
+                // },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        return params.name + ': R$' + params.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                    }
+                },
+                legend: {
+                  orient: 'horizontal',
+                bottom: '0%', // Ajusta a posição da legenda para ficar abaixo do gráfico
+                left: 'center'
+                },
+                series: [{
+                  name: 'R$',
+                  type: 'pie',
+                  radius: '75%',
+                  data: series,
+                  label: {
+                        formatter: function(params) {
+                            return params.name + ': R$' + params.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                        }
+                    },
+                  emphasis: {
+                    itemStyle: {
+                      shadowBlur: 10,
+                      shadowOffsetX: 0,
+                      shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                  }
+                }]
+              });
+            });
+          </script>
+          
+        </div> <!-- End Pie Chart -->
+
+
          <!-- Gráfico Balanço Financeiro 2024 -->
          <div>
           <div class="card">
